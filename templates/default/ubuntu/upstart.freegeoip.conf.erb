@@ -7,7 +7,6 @@ stop on runlevel [!2345]
 respawn
 respawn limit 5 30
 
-chdir /usr/share/statsd
 <% unless node["platform_version"].to_f < 11.10 -%>
 setuid <%= node[:freegeoip][:user] %>
 <% end %>
@@ -19,5 +18,3 @@ script
   exec <%= node[:freegeoip][:install_path]-%>/freegeoip -addr="<%=node[:freegeoip][:listen][:address]-%>:<%=node[:freegeoip][:listen][:port]-%>" <%= node[:freegeoip][:use_xforwardedfor] == true ? "-use-x-forwarded-for=true" : "" -%> >> <%= node[:freegeoip][:log_path] -%>/freegeoip.log 2>&1
 <% end -%>
 end script
-
-emits statsd-running
